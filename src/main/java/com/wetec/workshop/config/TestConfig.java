@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.wetec.workshop.entities.Orders;
 import com.wetec.workshop.entities.Users;
+import com.wetec.workshop.entities.enums.OrdersStatus;
 import com.wetec.workshop.repositories.OrdersRepository;
 import com.wetec.workshop.repositories.UsersRepository;
 
@@ -29,9 +30,9 @@ public class TestConfig implements CommandLineRunner {
 		Users u1 = new Users(null, "Maria Brown", "maria@gmail.com", "988888888", "123456"); 
 		Users u2 = new Users(null, "Alex Green", "alex@gmail.com", "977777777", "123456"); 
 		
-		Orders o1 = new Orders(null, Instant.parse("2022-08-26T19:53:07Z"), u1); 
-		Orders o2 = new Orders(null, Instant.parse("2022-08-26T03:42:10Z"), u2); 
-		Orders o3 = new Orders(null, Instant.parse("2022-08-26T15:21:22Z"), u1); 
+		Orders o1 = new Orders(null, Instant.parse("2022-08-26T19:53:07Z"), OrdersStatus.PAID, u1); 
+		Orders o2 = new Orders(null, Instant.parse("2022-08-26T03:42:10Z"), OrdersStatus.WAITING_PAYMENT, u2); 
+		Orders o3 = new Orders(null, Instant.parse("2022-08-26T15:21:22Z"), OrdersStatus.WAITING_PAYMENT, u1); 
 
 		
 		usersRepository.saveAll(Arrays.asList(u1, u2));

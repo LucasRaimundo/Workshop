@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Products implements Serializable {
@@ -23,7 +25,8 @@ public class Products implements Serializable {
 	private Double price;
 	private String imgUrl;
 	
-	@Transient
+	@ManyToMany
+	@JoinTable(name = "products_categorys", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Categorys> categories = new HashSet<>();
 	
 	public Products() {

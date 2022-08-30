@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.wetec.workshop.entities.Categorys;
 import com.wetec.workshop.entities.OrderItem;
 import com.wetec.workshop.entities.Orders;
+import com.wetec.workshop.entities.Payment;
 import com.wetec.workshop.entities.Products;
 import com.wetec.workshop.entities.Users;
 import com.wetec.workshop.entities.enums.OrdersStatus;
@@ -85,6 +86,11 @@ public class TestConfig implements CommandLineRunner {
 		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
 		
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+		
+		Payment pay1 = new Payment(null, Instant.parse("2022-08-26T19:53:07Z"), o1);
+		o1.setPayment(pay1);
+		
+		ordersRepository.save(o1);
 		
 	}
 	

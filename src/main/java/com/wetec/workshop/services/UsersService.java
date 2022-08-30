@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.wetec.workshop.entities.Users;
 import com.wetec.workshop.repositories.UsersRepository;
+import com.wetec.workshop.services.exceptions.DatabaseException;
 import com.wetec.workshop.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -15,24 +18,30 @@ public class UsersService {
 
 	@Autowired
 	private UsersRepository repository;
-	
-	public List<Users> findAll(){
+
+	public List<Users> findAll() {
 		return repository.findAll();
 	}
-	
-	public Users findById(Long id){
+
+	public Users findById(Long id) {
 		Optional<Users> obj = repository.findById(id);
-		return obj.orElseThrow(()-> new ResourceNotFoundException(id));
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
-	
+
 	public Users insert(Users obj) {
-		 return repository.save(obj);
+		return repository.save(obj);
 	}
-	
+
 	public void delete(Long id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
-	
+
 	public Users update(Long id, Users obj) {
 		Users entity = repository.getOne(id);
 		updateData(entity, obj);
